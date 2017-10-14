@@ -68,13 +68,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean check = SwitchCharge.isChecked();
                 if(check) try {
-                    Process exec = getRuntime().exec(new String[]{"su", "-c", "echo 0 > /sys/class/power_supply/battery/charging_enabled"});
+                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "echo 0 > /sys/class/power_supply/battery/charging_enabled"});
+                    Process exec2 = getRuntime().exec(new String[]{"su", "-c", "chmod 444 /sys/class/power_supply/battery/charging_enabled"});
                     Toast.makeText(MainActivity.this, R.string.usb_charging_is_disabled, Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 else try {
-                    Process exec = getRuntime().exec(new String[]{"su", "-c", "echo 1 > /sys/class/power_supply/battery/charging_enabled"});
+                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "chmod 644 /sys/class/power_supply/battery/charging_enabled"});
+                    Process exec2 = getRuntime().exec(new String[]{"su", "-c", "echo 1 > /sys/class/power_supply/battery/charging_enabled"});
                     Toast.makeText(MainActivity.this, R.string.usb_charging_is_enabled, Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -87,13 +89,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean check = SwitchConnection.isChecked();
                 if(check) try {
-                    Process exec = getRuntime().exec(new String[]{"su", "-c", "echo 0 > /sys/class/android_usb/android0/enable"});
+                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "echo 0 > /sys/class/android_usb/android0/enable"});
+                    Process exec2 = getRuntime().exec(new String[]{"su", "-c", "chmod 444 /sys/class/android_usb/android0/enable"});
                     Toast.makeText(MainActivity.this, R.string.usb_port_is_disabled, Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 else try {
-                    Process exec = getRuntime().exec(new String[]{"su", "-c", "echo 1 > /sys/class/android_usb/android0/enable"});
+                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "chmod 644 /sys/class/android_usb/android0/enable"});
+                    Process exec2 = getRuntime().exec(new String[]{"su", "-c", "echo 1 > /sys/class/android_usb/android0/enable"});
                     Toast.makeText(MainActivity.this, R.string.usb_port_is_enabled, Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
