@@ -87,13 +87,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean check = SwitchConnection.isChecked();
                 if(check) try {
-                    Process exec = getRuntime().exec(new String[]{"su", "-c", "echo 0 > /sys/devices/virtual/android_usb/android0/enable"});
+                    Process exec = getRuntime().exec(new String[]{"su", "-c", "echo 0 > /sys/class/android_usb/android0/enable"});
                     Toast.makeText(MainActivity.this, R.string.usb_port_is_disabled, Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 else try {
-                    Process exec = getRuntime().exec(new String[]{"su", "-c", "echo 1 > /sys/devices/virtual/android_usb/android0/enable"});
+                    Process exec = getRuntime().exec(new String[]{"su", "-c", "echo 1 > /sys/class/android_usb/android0/enable"});
                     Toast.makeText(MainActivity.this, R.string.usb_port_is_enabled, Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
