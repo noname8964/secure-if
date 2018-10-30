@@ -17,6 +17,19 @@
         tools:ignore="MissingConstraints">
 
         <Switch
+            android:id="@+id/switch_boot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="40dp"
+            android:paddingTop="30dp"
+            android:text="@string/boot"
+            android:textOn="@string/boot_enabled"
+            android:textOff="@string/boot_disabled"
+            tools:ignore="RtlHardcoded" />
+
+        <Switch
             android:id="@+id/switch_usbcharge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,8 +38,8 @@
             android:paddingRight="40dp"
             android:paddingTop="30dp"
             android:text="@string/usb_charging"
-            android:textOff="@string/usb_charging_is_enabled"
-            android:textOn="@string/usb_charging_is_disabled"
+            android:textOn="@string/usb_charging_is_enabled"
+            android:textOff="@string/usb_charging_is_disabled"
             tools:ignore="RtlHardcoded" />
 
         <Switch
@@ -38,8 +51,8 @@
             android:paddingRight="40dp"
             android:paddingTop="20dp"
             android:text="@string/usb_connection"
-            android:textOff="@string/usb_port_is_enabled"
-            android:textOn="@string/usb_port_is_disabled"
+            android:textOn="@string/usb_port_is_enabled"
+            android:textOff="@string/usb_port_is_disabled"
             tools:ignore="RtlHardcoded" />
 
     </LinearLayout>
