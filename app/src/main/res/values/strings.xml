@@ -10,11 +10,11 @@
     <string name="action_open">Open</string>
     <string name="action_settings">Settings</string>
     <string name="boot">Disable on boot</string>
-    <string name="boot_disabled">Disable on boot is Disabled</string>
-    <string name="boot_enabled">Disable on boot is Enabled</string>
+    <string name="boot_enabled">Enabled on boot</string>
+    <string name="boot_disabled">Disabled on boot</string>
     <string name="usb_charging">USB Charging</string>
-    <string name="usb_charging_is_disabled">USB Charging is Disabled</string>
     <string name="usb_charging_is_enabled">USB Charging is Enabled</string>
+    <string name="usb_charging_is_disabled">USB Charging is Disabled</string>
     <string name="usb_connection">USB Connection</string>
     <string name="usb_port_is_disabled">USB Port is Disabled</string>
     <string name="usb_port_is_enabled">USB Port is Enabled</string>
