@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Secure I/F</string>
+    <string name="app_name">Secure I/F Legacy</string>
     <string name="action_about">About</string>
     <string name="action_add">Add</string>
     <string name="action_cancel">Cancel</string>
@@ -9,6 +9,9 @@
     <string name="action_ok">OK</string>
     <string name="action_open">Open</string>
     <string name="action_settings">Settings</string>
+    <string name="boot">Disable on boot</string>
+    <string name="boot_enabled">Enabled on boot</string>
+    <string name="boot_disabled">Disabled on boot</string>
     <string name="usb_charging">USB Charging</string>
     <string name="usb_charging_is_disabled">USB Charging is Disabled</string>
     <string name="usb_charging_is_enabled">USB Charging is Enabled</string>
@@ -19,7 +22,7 @@
         <![CDATA[
         This application for controlling the function of the Android USB interface to protect your device.<br /><br />
         <b>Version:</b> 1.0.1<br />
-        <b>GitHub:</b> <a href="https://github.com/iternull/secure-if">Secure I/F</a><br />
+        <b>GitHub:</b> <a href="https://github.com/noname8964/secure-if">Secure I/F</a><br />
         <b>License:</b> <a href="https://www.iternull.com/licenses/">IterNull</a><br />
         ]]>
     </string>
