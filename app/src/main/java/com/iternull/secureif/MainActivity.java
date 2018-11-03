@@ -74,17 +74,16 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, R.string.need_magisk, Toast.LENGTH_SHORT).show();
         }
         SwitchCharge.setChecked(getValue(new String[]{"cat", "/sys/class/power_supply/battery/input_suspend"}, "1"));
-        SwitchConnection.setChecked(getValue(new String[]{"getprop", "persist.sys.usb.config"}, "none"));
+        SwitchConnection.setChecked(getValue(new String[]{"getprop", "sys.usb.state"}, "none"));
 
         SwitchBoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean check = SwitchBoot.isChecked();
-                if(check) {
+                if (check) {
                     cpScript();
                     Toast.makeText(MainActivity.this, R.string.boot_enabled, Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     rmScript();
                     Toast.makeText(MainActivity.this, R.string.boot_disabled, Toast.LENGTH_SHORT).show();
                 }
@@ -95,23 +94,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean check = SwitchCharge.isChecked();
-                if(!check) {
-                    try {
-                        Process exec1 = getRuntime().exec(new String[]{"su", "-c", "echo 1 > /sys/class/power_supply/battery/input_suspend"});
-                        exec1.waitFor();
-                        Toast.makeText(MainActivity.this, R.string.usb_charging_is_disabled, Toast.LENGTH_SHORT).show();
-                    } catch (InterruptedException | IOException e) {
-                        e.printStackTrace();
-                    }
+                if (!check) try {
+                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "echo 1 > /sys/class/power_supply/battery/input_suspend"});
+                    exec1.waitFor();
+                    Toast.makeText(MainActivity.this, R.string.usb_charging_is_disabled, Toast.LENGTH_SHORT).show();
+                } catch (InterruptedException | IOException e) {
+                    e.printStackTrace();
                 }
-                else {
-                    try {
-                        Process exec1 = getRuntime().exec(new String[]{"su", "-c", "echo 0 > /sys/class/power_supply/battery/input_suspend"});
-                        exec1.waitFor();
-                        Toast.makeText(MainActivity.this, R.string.usb_charging_is_enabled, Toast.LENGTH_SHORT).show();
-                    } catch (InterruptedException | IOException e) {
-                        e.printStackTrace();
-                    }
+                else try {
+                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "echo 0 > /sys/class/power_supply/battery/input_suspend"});
+                    exec1.waitFor();
+                    Toast.makeText(MainActivity.this, R.string.usb_charging_is_enabled, Toast.LENGTH_SHORT).show();
+                } catch (InterruptedException | IOException e) {
+                    e.printStackTrace();
+
                 }
             }
         });
