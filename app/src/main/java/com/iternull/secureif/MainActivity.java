@@ -116,30 +116,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean check = SwitchConnection.isChecked();
-                if(!check) try {
-                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "setprop persist.sys.usb.config none"});
-                    exec1.waitFor();
-                    Process exec2 = getRuntime().exec(new String[]{"su", "-c", "setprop sys.usb.config none"});
-                    exec2.waitFor();
-                    Process exec3 = getRuntime().exec(new String[]{"su", "-c", "setprop sys.usb.configfs 0"});
-                    exec3.waitFor();
-                    //Brevent/Shizuku Server/Storage Redirect root method compatible
-                    Process exec4 = getRuntime().exec(new String[]{"su", "-c", "start adbd"});
-                    exec4.waitFor();
+                if (!check) {
+                    setProp("persist.sys.usb.config", "none");
+                    setProp("sys.usb.config", "none");
+                    setProp("sys.usb.configfs", "0");
+                    getValue(new String[]{"su", "-c", "settings put global adb_enabled 0", "&&", "echo 0"}, "0");
                     Toast.makeText(MainActivity.this, R.string.usb_port_is_disabled, Toast.LENGTH_SHORT).show();
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-                else try {
-                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "setprop persist.sys.usb.config 'mtp,mass_storage,adb'"});
-                    exec1.waitFor();
-                    Process exec2 = getRuntime().exec(new String[]{"su", "-c", "setprop sys.usb.config 'mtp,mass_storage,adb'"});
-                    exec2.waitFor();
-                    Process exec3 = getRuntime().exec(new String[]{"su", "-c", "setprop sys.usb.configfs 1"});
-                    exec3.waitFor();
+                } else {
+                    setProp("sys.usb.configfs", "1");
+                    setProp("sys.usb.config", "mtp,mass_storage,adb");
+                    setProp("persist.sys.usb.config", "mtp,mass_storage,adb");
+                    getValue(new String[]{"su", "-c", "settings put global adb_enabled 1", "&&", "echo 0"}, "0");
                     Toast.makeText(MainActivity.this, R.string.usb_port_is_enabled, Toast.LENGTH_SHORT).show();
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         });
@@ -247,6 +235,15 @@ public class MainActivity extends AppCompatActivity {
         try {
             new ProcessBuilder("su", "-c", "rm", "-f", "/sbin/.core/img/.core/service.d/secure-if.sh").start().waitFor();
         } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setProp(String prop, String value) {
+        try {
+            Process exec = getRuntime().exec(new String[]{"su", "-c", "setprop", prop, value});
+            exec.waitFor();
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
