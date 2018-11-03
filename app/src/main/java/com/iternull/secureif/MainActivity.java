@@ -225,11 +225,11 @@ public class MainActivity extends AppCompatActivity {
         try {
             InputStream inputStream = getAssets().open("secure-if.sh");
             File file = new File(getFilesDir().getAbsolutePath() + File.separator + "secure-if.sh");
-            if (!file.exists() || file.length() == 0) {
+            if (!file.exists() || file.length() == 0 || file.length() != inputStream.available()) {
                 FileOutputStream fos = new FileOutputStream(file);
                 int len;
                 byte[] buffer = new byte[1024];
-                while ((len=inputStream.read(buffer)) != -1) {
+                while ((len = inputStream.read(buffer)) != -1) {
                     fos.write(buffer, 0, len);
                 }
                 fos.flush();
