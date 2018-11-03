@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean check = SwitchConnection.isChecked();
                 if (!check) {
                     setProp("persist.sys.usb.config", "none");
+                    setProp("sys.usb.config.fac", "none");
                     setProp("sys.usb.config", "none");
                     setProp("sys.usb.configfs", "0");
                     getValue(new String[]{"su", "-c", "settings put global adb_enabled 0", "&&", "echo 0"}, "0");
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                     setProp("sys.usb.configfs", "1");
                     setProp("sys.usb.config", "mtp,mass_storage,adb");
                     setProp("persist.sys.usb.config", "mtp,mass_storage,adb");
+                    setProp("sys.usb.config.fac", "mtp,mass_storage," + getFac());
                     getValue(new String[]{"su", "-c", "settings put global adb_enabled 1", "&&", "echo 0"}, "0");
                     Toast.makeText(MainActivity.this, R.string.usb_port_is_enabled, Toast.LENGTH_SHORT).show();
                 }
@@ -185,6 +187,23 @@ public class MainActivity extends AppCompatActivity {
         }
         assert value != null;
         return !value.equals(def);
+    }
+
+    public String getFac() {
+        String value = "0";
+        try {
+            Process process = getRuntime().exec(new String[]{"getprop", "ro.boot.fac"});
+            InputStream inputStream = process.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            value = bufferedReader.readLine();
+            process.waitFor();
+            inputStream.close();
+            bufferedReader.close();
+            process.destroy();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return value;
     }
 
     public boolean ckMagisk() {
