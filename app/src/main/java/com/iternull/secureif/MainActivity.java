@@ -31,8 +31,8 @@ package com.iternull.secureif;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -54,7 +54,8 @@ import java.util.Objects;
 import static java.lang.Runtime.getRuntime;
 
 public class MainActivity extends AppCompatActivity {
-
+    private String CHARGE_PATH = "/sys/class/power_supply/battery/input_suspend";
+    private String SCRIPT_PATH = "/sbin/.core/img/.core/service.d/secure-if.sh";
     private Switch SwitchBoot, SwitchCharge, SwitchConnection;
 
     @Override
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             SwitchBoot.setEnabled(ckMagisk());
             Toast.makeText(MainActivity.this, R.string.need_magisk, Toast.LENGTH_SHORT).show();
         }
-        SwitchCharge.setChecked(getValue(new String[]{"cat", "/sys/class/power_supply/battery/input_suspend"}, "1"));
+        SwitchCharge.setChecked(getValue(new String[]{"cat", CHARGE_PATH}, "1"));
         SwitchConnection.setChecked(getValue(new String[]{"getprop", "sys.usb.state"}, "none"));
 
         SwitchBoot.setOnClickListener(new View.OnClickListener() {
@@ -82,11 +83,14 @@ public class MainActivity extends AppCompatActivity {
                 boolean check = SwitchBoot.isChecked();
                 if (check) {
                     cpScript();
-                    Toast.makeText(MainActivity.this, R.string.boot_enabled, Toast.LENGTH_SHORT).show();
+                    if (ckScript())
+                        Toast.makeText(MainActivity.this, R.string.boot_enabled, Toast.LENGTH_SHORT).show();
                 } else {
                     rmScript();
-                    Toast.makeText(MainActivity.this, R.string.boot_disabled, Toast.LENGTH_SHORT).show();
+                    if (ckScript())
+                        Toast.makeText(MainActivity.this, R.string.boot_disabled, Toast.LENGTH_SHORT).show();
                 }
+                SwitchBoot.setChecked(ckScript());
             }
         });
 
@@ -95,14 +99,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean check = SwitchCharge.isChecked();
                 if (!check) try {
-                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "echo 1 > /sys/class/power_supply/battery/input_suspend"});
+                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "echo 1 > " + CHARGE_PATH});
                     exec1.waitFor();
                     Toast.makeText(MainActivity.this, R.string.usb_charging_is_disabled, Toast.LENGTH_SHORT).show();
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
                 else try {
-                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "echo 0 > /sys/class/power_supply/battery/input_suspend"});
+                    Process exec1 = getRuntime().exec(new String[]{"su", "-c", "echo 0 > " + CHARGE_PATH});
                     exec1.waitFor();
                     Toast.makeText(MainActivity.this, R.string.usb_charging_is_enabled, Toast.LENGTH_SHORT).show();
                 } catch (InterruptedException | IOException e) {
@@ -136,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onShowHelpDialog() {
-        CharSequence styledText = Html.fromHtml(getString(R.string.text_help));
+        CharSequence styledText = Html.fromHtml(getString(R.string.text_help), Html.FROM_HTML_MODE_COMPACT);
         AlertDialog ad = new AlertDialog.Builder(this)
                 .setTitle(R.string.action_help)
                 .setMessage(styledText)
@@ -154,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onShowAboutDialog() {
-        CharSequence styledText = Html.fromHtml(getString(R.string.text_about));
+        CharSequence styledText = Html.fromHtml(getString(R.string.text_about), Html.FROM_HTML_MODE_COMPACT);
         AlertDialog ad = new AlertDialog.Builder(this)
                 .setTitle(R.string.action_about)
                 .setMessage(styledText)
@@ -218,14 +222,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean ckScript() {
-        int result = 1;
-        try {
-            Process exec = getRuntime().exec(new String[]{"su", "-c", "ls", "/sbin/.core/img/.core/service.d/secure-if.sh"});
-            result = exec.waitFor();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result == 0;
+        File file = new File(SCRIPT_PATH);
+        return file.exists();
     }
 
     public void cpScript() {
@@ -243,8 +241,8 @@ public class MainActivity extends AppCompatActivity {
                 inputStream.close();
                 fos.close();
             }
-            new ProcessBuilder("su", "-c", "cp", String.valueOf(file), "/sbin/.core/img/.core/service.d/secure-if.sh").start().waitFor();
-            new ProcessBuilder("su", "-c", "chmod", "0755", "/sbin/.core/img/.core/service.d/secure-if.sh").start().waitFor();
+            new ProcessBuilder("su", "-c", "cp", String.valueOf(file), SCRIPT_PATH).start().waitFor();
+            new ProcessBuilder("su", "-c", "chmod", "0755", SCRIPT_PATH).start().waitFor();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -252,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void rmScript() {
         try {
-            new ProcessBuilder("su", "-c", "rm", "-f", "/sbin/.core/img/.core/service.d/secure-if.sh").start().waitFor();
+            new ProcessBuilder("su", "-c", "rm", "-f", SCRIPT_PATH).start().waitFor();
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
