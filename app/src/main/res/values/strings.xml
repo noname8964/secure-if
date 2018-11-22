@@ -23,7 +23,7 @@
     <string name="text_about">
         <![CDATA[
         This application for controlling the function of the Android USB interface to protect your device.<br /><br />
-        <b>Version:</b> 1.0.2<br />
+        <b>Version:</b> 1.0.4<br />
         <b>GitHub:</b> <a href="https://github.com/noname8964/secure-if">Secure I/F</a><br />
         <b>License:</b> <a href="https://www.iternull.com/licenses/">IterNull</a><br />
         ]]>
