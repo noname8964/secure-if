@@ -138,11 +138,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 boolean check = SwitchConnection.isChecked();
                 if (!check) {
+                    getValue(new String[]{"su", "-c", "settings put global adb_enabled 0", "&&", "echo 0"}, "0");
                     setProp("persist.sys.usb.config", "none");
                     setProp("sys.usb.config.fac", "none");
                     setProp("sys.usb.config", "none");
                     setProp("sys.usb.configfs", "0");
-                    getValue(new String[]{"su", "-c", "settings put global adb_enabled 0", "&&", "echo 0"}, "0");
                     Toast.makeText(MainActivity.this, R.string.usb_port_is_disabled, Toast.LENGTH_SHORT).show();
                 } else {
                     setProp("sys.usb.configfs", "1");
