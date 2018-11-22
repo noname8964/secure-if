@@ -18,6 +18,7 @@
     <string name="usb_connection">USB Connection</string>
     <string name="usb_port_is_disabled">USB Port is Disabled</string>
     <string name="usb_port_is_enabled">USB Port is Enabled</string>
+    <string name="adb_debug">ADB Debug</string>
     <string name="need_magisk">Disable on boot dependence on Magisk</string>
     <string name="text_about">
         <![CDATA[

@@ -55,5 +55,15 @@
             android:textOff="@string/usb_port_is_disabled"
             tools:ignore="RtlHardcoded" />
 
+        <CheckBox
+            android:id="@+id/checkbox_debug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:layout_gravity="center|end"
+            android:gravity="center|end"
+            android:checked="true"
+            android:text="@string/adb_debug" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

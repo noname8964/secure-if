@@ -29,16 +29,19 @@ package com.iternull.secureif;
  *                  jgs     //__/   //___.--''`
  */
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,9 +68,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("debug", Context.MODE_PRIVATE);
+
         SwitchBoot = findViewById(R.id.switch_boot);
         SwitchCharge = findViewById(R.id.switch_usbcharge);
         SwitchConnection = findViewById(R.id.switch_usbdata);
+        final CheckBox CheckAdb = findViewById(R.id.checkbox_debug);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        CheckAdb.setChecked(sharedPreferences.getBoolean("debug", true));
+
         if (ckMagisk()) {
             SwitchBoot.setChecked(ckScript());
         } else {
@@ -76,6 +85,14 @@ public class MainActivity extends AppCompatActivity {
         }
         SwitchCharge.setChecked(getValue(new String[]{"cat", CHARGE_PATH}, "1"));
         SwitchConnection.setChecked(getValue(new String[]{"getprop", "sys.usb.state"}, "none"));
+
+        CheckAdb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.putBoolean("debug", CheckAdb.isChecked());
+                editor.apply();
+            }
+        });
 
         SwitchBoot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +149,8 @@ public class MainActivity extends AppCompatActivity {
                     setProp("sys.usb.config", "mtp,mass_storage,adb");
                     setProp("persist.sys.usb.config", "mtp,mass_storage,adb");
                     setProp("sys.usb.config.fac", "mtp,mass_storage," + getFac());
-                    getValue(new String[]{"su", "-c", "settings put global adb_enabled 1", "&&", "echo 0"}, "0");
+                    if (CheckAdb.isChecked())
+                        getValue(new String[]{"su", "-c", "settings put global adb_enabled 1", "&&", "echo 0"}, "0");
                     Toast.makeText(MainActivity.this, R.string.usb_port_is_enabled, Toast.LENGTH_SHORT).show();
                 }
             }
