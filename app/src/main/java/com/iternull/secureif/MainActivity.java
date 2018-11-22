@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, R.string.boot_enabled, Toast.LENGTH_SHORT).show();
                 } else {
                     rmScript();
-                    if (ckScript())
+                    if (!ckScript())
                         Toast.makeText(MainActivity.this, R.string.boot_disabled, Toast.LENGTH_SHORT).show();
                 }
                 SwitchBoot.setChecked(ckScript());
